@@ -25,20 +25,10 @@ const ProductSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  sizes: {
-    type: Array,
-    required: true,
-  },
-  sale: {
-    type: Boolean,
-    required: true,
-  },
-  quantity: {
-    type: Number,
-    required: true,
-  },
-  genders: {
-    type: String,
-  },
+  stock: [{
+    color: String,
+    size: Number,
+    quantity: Number,
+  }],
 });
 module.exports = mongoose.model("Product", ProductSchema);
