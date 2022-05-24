@@ -11,15 +11,15 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/api/products", async (req, res) => {
   try {
     const products = await Product.find();
-    res.json(products);
+    return res.json(products);
   } catch (e) {
-    res.status(500).json({ message: e.message });
+    return res.status(500).json({ message: e.message });
   }
 });
-app.get("/api/products/details", async (req, res) => {
+app.get("/api/products/:id", async (req, res) => {
   try {
-    const product = await Product.findById(req.body.id);
-    res.json(product);
+    const product = await Product.findById(req.params.id);
+    return res.json(product);
   } catch (e) {
     res.status(500).json({ message: e.message });
   }
