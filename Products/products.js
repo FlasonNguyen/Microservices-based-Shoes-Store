@@ -53,14 +53,6 @@ app.delete("/api/products", async (req, res) => {
     res.status(400).json({ message: e.message });
   }
 });
-app.get("/api/products/:productId", async (req, res) => {
-  try {
-    const product = await Product.findOne({ _id: req.params.productId });
-    return res.status(200).json({ product });
-  } catch (err) {
-    return res.status(500).json({ message: err.message });
-  }
-});
 app.put("/api/products/:productId", async (req, res) => {
   try {
     const product = await Product.findOneAndUpdate(

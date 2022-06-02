@@ -12,13 +12,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   session({
     secret: "keyboard cat",
-    resave: false,
+    resave: true,
     saveUninitialized: true,
     cookie: { secure: false },
   })
 );
 
 app.get("/api/cart", async (req, res) => {
+  console.log(req.session.cart);
   if (!req.session.cart) {
     return res.json({ products: null, totalPrice: 0 });
   }
@@ -26,21 +27,26 @@ app.get("/api/cart", async (req, res) => {
   let newCart = new Cart(req.session.cart);
   req.session.cart = newCart;
   return res.json({
-    products: newCart.getItems(),
+    cartProducts: newCart.getItems(),
     totalPrice: newCart.totalPrice,
     cart: newCart,
   });
 });
 app.post("/api/cart", async (req, res) => {
-  const products = await (
+  const product = await (
     await fetch(`http://localhost:3215/api/products/${req.body.id}`, {
       method: "GET",
     })
   ).json();
   var cart = new Cart(req.session.cart ? req.session.cart : {});
-  cart.add(products, req.body.id);
+  cart.add(product, req.body.id);
   req.session.cart = cart;
-  return res.json(cart);
+  console.log(req.session.cart);
+  return res.json({
+    cartProducts: cart.getItems(),
+    totalPrice: cart.totalPrice,
+    cart: cart,
+  });
 });
 app.delete("/api/cart", async (req, res) => {
   let cart = new Cart(req.session.cart);

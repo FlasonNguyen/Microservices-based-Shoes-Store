@@ -58,17 +58,3 @@ app.post("/users/me/logout", auth, async (req, res) => {
     res.status(500).json({ message: e.message });
   }
 });
-app.post("/users/me/logoutAll", auth, async (req, res) => {
-  try {
-    req.user.tokens = [];
-    await req.user.save();
-    res.json({ message: "Logged out" });
-  } catch (e) {
-    res.status(500).json({ message: e.message });
-  }
-});
-app.listen(process.env.PORT, async () => {
-  mongoose.connect(process.env.MONGO_URI).then(() => {
-    console.log(`http://localhost:${process.env.PORT}/`);
-  });
-});
